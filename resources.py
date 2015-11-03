@@ -1,8 +1,9 @@
 import os.path
+from tqdm import *
 
 
 ROCK_YOU_DB = "./resources/rockyou-withcount.txt"
-MARKOV_FILE = "./resources/markov.txt"
+MARKOV_FILE = "./resources/duet.txt"
 
 
 def generate_duet_prob():
@@ -25,25 +26,28 @@ def generate_duet_prob():
     # number of total duets
     total_count = 0.0
 
-    for line in rock_you:
+    for line in tqdm(rock_you):
         data = line.strip().split(" ")
 
-        for char in data[1]:
-            if temp == "":
-                temp = char
-            else:
-                duet = temp + char
-                if duet in duet_probability:
-                    duet_probability[duet] += float(data[0])
+        if len(data) > 1:
+            for char in data[1]:
+                if temp == "":
+                    temp = char
                 else:
-                    duet_probability[duet] = float(data[0])
-                total_count += float(data[0])
+                    duet = temp + char
+                    if duet in duet_probability:
+                        duet_probability[duet] += float(data[0])
+                    else:
+                        duet_probability[duet] = float(data[0])
+                    total_count += float(data[0])
 
         temp = ""
     rock_you.close()
 
     for duet in duet_probability.keys():
         duet_probability[duet] = duet_probability[duet] / total_count
+
+    print "--> done"
 
     return duet_probability
 
@@ -55,7 +59,7 @@ def save_duet(duet_dict):
     """
     f = open(MARKOV_FILE, 'w+')
     for duet in duet_dict.keys():
-        f.write(duet + " " + duet_dict[duet] + "\n")
+        f.write(duet + " " + str(duet_dict[duet]) + "\n")
     f.close()
 
 
@@ -85,3 +89,5 @@ def get_duet_probabilities():
     else:
         return load_duet()
 
+
+get_duet_probabilities()
