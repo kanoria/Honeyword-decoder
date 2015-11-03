@@ -1,5 +1,7 @@
 import argparse
 import detectors.entropy
+import password_leaner
+import classifier
 
 parser = argparse.ArgumentParser(description='Detect passwords in honey list')
 
@@ -26,3 +28,5 @@ print indexes
 for index in xrange(len(to_be_inspected)):
     print to_be_inspected[index][indexes[index]]
 
+def main():
+    
