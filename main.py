@@ -53,6 +53,5 @@ def detect_real_password(password_list):
 
 indexes = map(detect_real_password, to_be_inspected)
 print indexes
-
 for index in xrange(len(to_be_inspected)):
     print to_be_inspected[index][indexes[index]]
