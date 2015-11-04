@@ -1,7 +1,6 @@
 import argparse
 import detectors.entropy
-import password_leaner
-import classifier
+import detectors.markov
 
 parser = argparse.ArgumentParser(description='Detect passwords in honey list')
 
@@ -23,10 +22,8 @@ for line in args.input_passwords_file:
     if len(to_be_inspected[index]) == args.n:
         index += 1
 
-indexes = map(detectors.entropy.detect_password, to_be_inspected)
+indexes = map(detectors.markov.detect_outlier, to_be_inspected)
 print indexes
+
 for index in xrange(len(to_be_inspected)):
     print to_be_inspected[index][indexes[index]]
-
-def main():
-    
