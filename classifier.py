@@ -1,3 +1,4 @@
+import password_leaner
 import pprint
 
 pp = pprint.PrettyPrinter(indent=1)
@@ -87,6 +88,7 @@ def classifier(token):
         sequence_numbers: logical sequence of digits (e.g. "369")
         even_numbers: all digits are even digits (e.g. "4824")
         odd_numbers: all digits are odd digits (e.g. "35573")
+        same_sequence_specialchars: sequence of special characters (e.g. "^^^^^^")
 
 
     Classifies by priority:
@@ -224,3 +226,40 @@ def tokeniser(tokenInfo):
 
     return tokenInfo
 
+def classifyHoneywords(honeywords):
+
+    """
+    Accepts an array of honeywords. Sorts through the array through the password_leaner to remove LEET speak, 
+    divides remaining word in tokens, 
+    classifies relevant tokens,
+    counts the number of patterns in each honeyword,
+    returns the index of the honeyword with the highest number of patters or -1 if there is no maximum.
+    """
+
+    classifiedHoneywords = []
+    valueOfPatternsInHoneywords = []
+
+    for honeyword in honeywords:
+        modifiedHoneyword = password_leaner(honeyword)
+        classifiedHoneywords.append(tokeniser(modifiedHoneyword))
+
+    typesOfPatterns = ["words", "same_sequence_letters", "sequence_letters", "same_sequence_numbers", "sequence_numbers", "even_numbers", "odd_numbers", "same_sequence_specialchars"]
+
+    for classification in classifiedHoneywords["tokens"]:
+
+        valueOfPatterns = 0
+
+        for pattern in typesOfPatterns:
+            if pattern in classification.keys():
+                for p in classification[pattern]:
+                    valueOfPatterns += 1
+
+        valueOfPatternsInHoneywords.append(valueOfPatterns)
+
+    index = max(valueOfPatternsInHoneywords)
+
+    if len([i for i, j in enumerate(a) if j == m]) > 1:
+        return -1
+
+    else:
+        return index
