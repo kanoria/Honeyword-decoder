@@ -27,6 +27,3 @@ indexes = map(detectors.entropy.detect_password, to_be_inspected)
 print indexes
 for index in xrange(len(to_be_inspected)):
     print to_be_inspected[index][indexes[index]]
-
-def main():
-    
