@@ -1,5 +1,6 @@
 from constants import MAX_LEET_CHAR, LEET_REVERSE_MAPPER, ENGLISH_INDEX
 
+
 def password_leaner(honeyword):
     """ Returns an understandable honeyword
 

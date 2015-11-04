@@ -2,6 +2,7 @@ import argparse
 from detectors.entropy import detect_password as entropy_detector
 from detectors.markov import detect_outlier as markov_detector
 from detectors.similarity import get_dissimilar_password as similarity_detector
+from detectors.tokenslib.classifier import classifyHoneywords as token_detector
 
 parser = argparse.ArgumentParser(description='Detect passwords in honey list')
 
@@ -28,12 +29,15 @@ detection_algorithms = [
     {
         "fct": entropy_detector,
         "weight": 0.5
-    },{
+    }, {
         "fct": markov_detector,
         "weight": 1
     }, {
         "fct": similarity_detector,
         "weight": 2
+    }, {
+        "fct": token_detector,
+        "weight": 1
     }
 ]
 

@@ -1,7 +1,9 @@
-import password_leaner
 import pprint
 
+from password_leaner import password_leaner
+
 pp = pprint.PrettyPrinter(indent=1)
+
 
 def isInAlphabeticalSequence(word):
     """
@@ -135,6 +137,7 @@ def classifier(token):
         else:
             return "random_specialchars"
 
+
 def tokeniser(tokenInfo):
     """
     Accepts a dictionary and maps the remaining parts of the source password.
@@ -226,8 +229,8 @@ def tokeniser(tokenInfo):
 
     return tokenInfo
 
-def classifyHoneywords(honeywords):
 
+def classifyHoneywords(honeywords):
     """
     Accepts an array of honeywords. Sorts through the array through the password_leaner to remove LEET speak, 
     divides remaining word in tokens, 
@@ -243,23 +246,27 @@ def classifyHoneywords(honeywords):
         modifiedHoneyword = password_leaner(honeyword)
         classifiedHoneywords.append(tokeniser(modifiedHoneyword))
 
-    typesOfPatterns = ["words", "same_sequence_letters", "sequence_letters", "same_sequence_numbers", "sequence_numbers", "even_numbers", "odd_numbers", "same_sequence_specialchars"]
+    typesOfPatterns = ["words", "same_sequence_letters", "sequence_letters",
+                       "same_sequence_numbers", "sequence_numbers",
+                       "even_numbers", "odd_numbers",
+                       "same_sequence_specialchars"]
 
-    for classification in classifiedHoneywords["tokens"]:
-
+    for tokenized_honeyword in classifiedHoneywords:
         valueOfPatterns = 0
 
-        for pattern in typesOfPatterns:
-            if pattern in classification.keys():
-                for p in classification[pattern]:
+        for token_type in tokenized_honeyword["tokens"].keys():
+
+            if token_type in typesOfPatterns:
+                for token in tokenized_honeyword["tokens"][token_type]:
                     valueOfPatterns += 1
 
         valueOfPatternsInHoneywords.append(valueOfPatterns)
 
-    index = max(valueOfPatternsInHoneywords)
+    max_value = max(valueOfPatternsInHoneywords)
+    result = [i for i, j in enumerate(valueOfPatternsInHoneywords) if j ==
+              max_value]
 
-    if len([i for i, j in enumerate(a) if j == m]) > 1:
+    if len(result) > 1:
         return -1
-
     else:
-        return index
+        return result[0]
